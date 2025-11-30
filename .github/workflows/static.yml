@@ -1,0 +1,41 @@
+name: Deploy Vite App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Vite Github Pages Deployer
+        uses: skywarth/vite-github-pages-deployer@v1.5.0
+        with:
+          # 👇 ruta base EXACTA del repositorio (muy importante)
+          public_base_path: /impostor-game/
+
+          # Carpeta de salida de Vite después del build
+          build_path: ./dist
+
+          # Entorno de instalación
+          install_phase_node_env: dev
+
+          # Entorno de build
+          build_phase_node_env: production
+
+          # Usamos npm
+          package_manager: npm
+
+          # Nombre del artefacto
+          artifact_name: github-pages
+
+          # Debug off
+          debug_mode: false
+
+          # Directorio de trabajo
+          working_path: ./
