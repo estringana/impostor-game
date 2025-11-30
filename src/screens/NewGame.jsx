@@ -36,7 +36,6 @@ function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
   return (
     <>
       <Subtitle>Hora de decir quien va a jugar</Subtitle>
-      <Text>Jugadores</Text>
       <div className='space-y-2 mb-6'>{playersList}</div>
       <div>
         <div className='flex gap-2 mb-6'>
