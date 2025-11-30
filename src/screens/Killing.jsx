@@ -1,26 +1,22 @@
 import { useState } from 'react'
+import Subtitle from '../elements/Subtitle'
+import WarningButton from '../elements/WarningButton';
 
 function Killing({ players, killPlayer }) {
   const [selected, setSelected] = useState('');
 
   return (
     <>
-      <h2>Quien es el impostor?</h2>
-      {players.map((p, index) => (
-        <div key={index}>
-          <label >
-            <input
-              type="radio"
-              value={p.name}
-              checked={selected === p.name}
-              onChange={() => setSelected(p.name)}
-            />
+      <Subtitle>Quien es el impostor?</Subtitle>
+      <div className='space-y-2 mb-6'>
+        {players.map((p, index) => (
+          <div key={index} className={(p.name == selected ? 'bg-gray-700 border border-gray-500' : 'bg-gray-800 hover:bg-gray-700') + ' cursor-pointer flex items-center justify-between bg-gray-800 rounded-lg px-4 py-3 cursor-pointer transition-colors'}
+            onClick={() => setSelected(p.name)} >
             {p.name}
-          </label>
-        </div>
-      ))}
-
-      {selected && <button onClick={() => killPlayer(selected)}>Matar a {selected}</button>}
+          </div>
+        ))}
+      </div>
+      {selected && <WarningButton onClick={() => killPlayer(selected)}>Matar a {selected}</WarningButton>}
     </>
   )
 }

@@ -1,4 +1,9 @@
 import { useState, useRef } from 'react'
+import Subtitle from '../elements/Subtitle';
+import Text from '../elements/Text';
+import SecundaryButton from '../elements/SecundaryButton';
+import InputText from '../elements/InputText';
+import PrimaryButton from '../elements/PrimaryButton';
 
 function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
   const [newPlayer, setNewPlayer] = useState('');
@@ -16,20 +21,31 @@ function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
   }
 
   const playersList = players.map(player =>
-    <li key={player}>{player} <button onClick={() => handlePlayerRemove(player)}>X</button></li>
+    <div className='flex items-center justify-between bg-gray-800 rounded-lg px-4 py-2 text-gray-100' key={player}>
+      {player}
+      <SecundaryButton onClick={() => handlePlayerRemove(player)}>X</SecundaryButton>
+    </div>
   );
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handlePlayersChange()
+    }
+  }
 
   return (
     <>
-      <h2>Hora de decir quien va a jugar</h2>
-      <h3>Jugadores</h3>
-      <ul>{playersList}</ul>
+      <Subtitle>Hora de decir quien va a jugar</Subtitle>
+      <Text>Jugadores</Text>
+      <div className='space-y-2 mb-6'>{playersList}</div>
       <div>
-        <input ref={newPlayerInputRef} type="text" value={newPlayer} onChange={e => setNewPlayer(e.target.value)} placeholder='Escribe aqui el nombre...' autoFocus />
-        <button onClick={handlePlayersChange}>Añade</button>
+        <div className='flex gap-2 mb-6'>
+          <InputText ref={newPlayerInputRef} type="text" value={newPlayer} onChange={e => setNewPlayer(e.target.value)} placeholder='Escribe aqui el nombre...' autoFocus onKeyDown={handleKeyDown}/>
+          <SecundaryButton onClick={handlePlayersChange}>Añade</SecundaryButton>
+        </div>
       </div>
       <div>
-      <button disabled={players.length < 3} onClick={() => startGame()}>Comenzar partida</button>
+      <PrimaryButton disabled={players.length < 3} onClick={() => startGame()}>Comenzar partida</PrimaryButton>
       </div>
     </>
   )
