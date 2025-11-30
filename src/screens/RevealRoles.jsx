@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { PlayerRole } from '../App'
+import { PlayerRole } from '../Player'
 import Text from '../elements/Text'
 import PrimaryButton from '../elements/PrimaryButton';
 import WarningButton from '../elements/WarningButton';
+import Messages from '../Messages';
 
 const State = {
   PASS_PHONE: 1,
@@ -10,35 +11,7 @@ const State = {
   REVEALING: 3,
 }
 
-export const CITIZEN_MESSAGES = [
-  "Eres un simple ciudadano. Qué glamour.",
-  "No eres el impostor… vaya, qué sorpresa.",
-  "Ciudadano. Haz lo que puedas, que tampoco es mucho.",
-  "Inocente total. Como tu historial de decisiones.",
-  "Te ha tocado ser ciudadano. No te duermas, crack."
-];
-
-export const PASS_PHONE_MESSAGES = [
-  "Pásale el móvil a {{player}}. Y no mires, cotilla.",
-  "Turno de {{player}}. Los demás, a mirar al techo.",
-  "{{player}}, te toca. Los demás, comportaos… por una vez.",
-  "Entrega el teléfono a {{player}}. Sí, con cuidado, que es caro.",
-  "Pásaselo a {{player}}. Y respira lejos del móvil, gracias."
-];
-
-export const IMPOSTOR_MESSAGES = [
-  "Eres el IMPOSTOR. Intenta no sonreír demasiado.",
-  "IMPOSTOR. Ya puedes activar tu modo rata.",
-  "Te ha tocado ser impostor. A ver si esta vez no te pillan al minuto.",
-  "Eres el impostor. Procura no celebrarlo en voz alta.",
-  "IMPOSTOR detectado. Tú sabrás qué haces con ese poder."
-];
-
-export function pickRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function RevealRoles({ players, footbalPlayer, rolesRevealed }) {
+function RevealRoles({ players, footballPlayer, rolesRevealed }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentState, setCurrentState] = useState(State.PASS_PHONE)
 
@@ -50,7 +23,7 @@ function RevealRoles({ players, footbalPlayer, rolesRevealed }) {
   };
 
   const passPhone = () => {
-    const message = pickRandom(PASS_PHONE_MESSAGES).replace("{{player}}", players[currentIndex].name);
+    const message = Messages.random.passPhone(players[currentIndex].name);
     return (
       <div key='currentIndex' className='animate-fade-in-up'>
         <Text>{message}</Text>
@@ -70,8 +43,8 @@ function RevealRoles({ players, footbalPlayer, rolesRevealed }) {
   const showCitizien = () => {
     return (
       <>
-        <Text>{pickRandom(CITIZEN_MESSAGES)}</Text>
-        <Text>El jugador es {footbalPlayer}</Text>
+        <Text>{Messages.for(PlayerRole.CITIZEN).assignment()}</Text>
+        <Text>El jugador es {footballPlayer}</Text>
         <PrimaryButton onClick={() => revealNext()}>Entendido</PrimaryButton>
       </>
     )
@@ -80,7 +53,7 @@ function RevealRoles({ players, footbalPlayer, rolesRevealed }) {
   const showImpostor = () => {
     return (
       <>
-        <Text>{pickRandom(IMPOSTOR_MESSAGES)}</Text>
+        <Text>{Messages.for(PlayerRole.IMPOSTOR).assignment()}</Text>
         <WarningButton onClick={() => revealNext()}>🤫 Soy el impostor</WarningButton>
       </>
     )
@@ -98,7 +71,7 @@ function RevealRoles({ players, footbalPlayer, rolesRevealed }) {
 
   const revealing = () => {
     return <>
-      {players[currentIndex].role == PlayerRole.CITIZIEN && showCitizien()}
+      {players[currentIndex].role == PlayerRole.CITIZEN && showCitizien()}
       {players[currentIndex].role == PlayerRole.IMPOSTOR && showImpostor()}
 
     </>

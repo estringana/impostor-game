@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react'
 import Subtitle from '../elements/Subtitle';
-import Text from '../elements/Text';
 import SecundaryButton from '../elements/SecundaryButton';
 import InputText from '../elements/InputText';
 import PrimaryButton from '../elements/PrimaryButton';
+import Messages from '../Messages';
 
 function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
   const [newPlayer, setNewPlayer] = useState('');
@@ -35,11 +35,11 @@ function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
 
   return (
     <>
-      <Subtitle>Hora de decir quien va a jugar</Subtitle>
+      <Subtitle>{Messages.random.choosePlayers()}</Subtitle>
       <div className='space-y-2 mb-6'>{playersList}</div>
       <div>
         <div className='flex gap-2 mb-6'>
-          <InputText ref={newPlayerInputRef} type="text" value={newPlayer} onChange={e => setNewPlayer(e.target.value)} placeholder='Escribe aqui el nombre...' autoFocus onKeyDown={handleKeyDown}/>
+          <InputText ref={newPlayerInputRef} type="text" value={newPlayer} onChange={e => setNewPlayer(e.target.value)} placeholder={Messages.random.namePlaceholder()} autoFocus onKeyDown={handleKeyDown}/>
           <SecundaryButton onClick={handlePlayersChange}>Añade</SecundaryButton>
         </div>
       </div>
