@@ -6,9 +6,19 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,26 +26,18 @@ jobs:
       - name: Vite Github Pages Deployer
         uses: skywarth/vite-github-pages-deployer@v1.5.0
         with:
-          # 👇 ruta base EXACTA del repositorio (muy importante)
+          # 👇 ruta base EXACTA del repositorio (el nombre que ves en GitHub)
           public_base_path: /impostor-game/
-
-          # Carpeta de salida de Vite después del build
           build_path: ./dist
-
-          # Entorno de instalación
           install_phase_node_env: dev
-
-          # Entorno de build
           build_phase_node_env: production
-
-          # Usamos npm
           package_manager: npm
-
-          # Nombre del artefacto
           artifact_name: github-pages
-
-          # Debug off
           debug_mode: false
-
-          # Directorio de trabajo
           working_path: ./
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
