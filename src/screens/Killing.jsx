@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Subtitle from '../elements/Subtitle'
 import WarningButton from '../elements/WarningButton';
+import ListItem from '../elements/ListItem';
 
 function Killing({ players, killPlayer }) {
   const [selected, setSelected] = useState('');
@@ -10,11 +11,11 @@ function Killing({ players, killPlayer }) {
       <Subtitle>🗳️ Quién es el impostor?</Subtitle>
       <div className='space-y-2 mb-6'>
         {players.map((p, index) => (
-          <div key={index} className={(p.name == selected ? 'bg-gray-700 border border-gray-500' : 'bg-gray-800 hover:bg-gray-700') + ' cursor-pointer flex items-center justify-between bg-gray-800 rounded-lg px-4 py-3 cursor-pointer transition-colors'}
+          <ListItem key={index} className={(p.name == selected ? 'bg-gray-700 border border-gray-500' : 'bg-gray-800 hover:bg-gray-700') + ' cursor-pointer flex items-center justify-between bg-gray-800 rounded-lg px-4 py-3 cursor-pointer transition-colors'}
             onClick={() => setSelected(p.name)} >
             {p.name}
             {p.name == selected && (<div>🎯</div>)}
-          </div>
+          </ListItem>
         ))}
       </div>
       {selected && <WarningButton onClick={() => killPlayer(selected)}>Matar a {selected} 💀</WarningButton>}

@@ -8,6 +8,7 @@ import Title from './elements/Title'
 import Card from './elements/Card'
 import Main from './elements/Main'
 import Text from './elements/Text'
+import Subtitle from './elements/Subtitle'
 import PrimaryButton from './elements/PrimaryButton'
 import GameEnded from './screens/GameEnded'
 import { PlayerRole, PlayerState, getNewPlayer } from './Player'
@@ -17,6 +18,7 @@ const State = {
   LOBBY: 'LOBBY',
   SETTING_GAME: 'SETTING_GAME',
   REVEAL_ROLES: 'REVEAL_ROLES',
+  READY_TO_START: 'READY_TO_START',
   KILLING: 'KILLING',
   FAIL: 'FAIL',
   GAME_ENDED: 'GAME_ENDED',
@@ -102,7 +104,7 @@ function App() {
   };
 
   const handleRolesRevealed = () => {
-    setState(State.KILLING)
+    setState(State.READY_TO_START)
   }
 
   const handleKillingPlayer = (killedPlayerName) => {
@@ -138,6 +140,15 @@ function App() {
     </>)
   }
 
+  const renderReadyToStart = () => {
+    const goBackToKilling = () => setState(State.KILLING);
+    return (<>
+      <Subtitle>🎭  Todos tenéis vuestro rol</Subtitle>
+      <Text>{Messages.random.getWaitUntilReady()}</Text>
+      <PrimaryButton onClick={goBackToKilling}>Empezar partida</PrimaryButton>
+    </>)
+  }
+
   const startAgain = () => {
     setPlayers(prev => prev.map(p => getNewPlayer(p.name)));
     setImpostorWins(false);
@@ -151,6 +162,7 @@ function App() {
         {state === State.LOBBY && <Lobby createGame={handleCreateGame} />}
         {state === State.SETTING_GAME && <NewGame players={players.map(p => p.name)} addNewPlayer={handleNewPlayer} removePlayer={handleRemovePlayer} startGame={handleStartGame} />}
         {state === State.REVEAL_ROLES && <RevealRoles players={players} footballPlayer={footballPlayer} rolesRevealed={handleRolesRevealed} />}
+        {state === State.READY_TO_START && renderReadyToStart()}
         {state === State.KILLING && <Killing players={players.filter(p => p.state == PlayerState.ALIVE)} killPlayer={handleKillingPlayer} />}
         {state === State.FAIL && renderFailScreen()}
         {state === State.GAME_ENDED && <GameEnded impostorWins={impostorWins} newGame={startAgain}/>}

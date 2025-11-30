@@ -129,6 +129,25 @@ export const NAME_PLACEHOLDER_MESSAGES = [
   "Pon tu nombre. El real, no el de gamer.",
 ];
 
+export const WAIT_PLAYERS = [
+  "Ya sabéis quiénes sois. O eso creéis. Cuando estéis listos… empezad el caos.",
+  "Todos tienen su rol. Ahora mirad a vuestros amigos con sospecha.",
+  "Roles entregados. No confiéis en nadie. Ni en vosotros mismos.",
+  "Vale, ya sois todos unos expertos en disimular. Cuando queráis, empieza la carnicería.",
+  "Fin del reparto de papeles. Empieza el reparto de culpas.",
+  "Ya está. Uno de vosotros miente. Descubrid quién… o morid en el intento.",
+  "Roles listos. Mirad alrededor y elegid a quién odiar primero.",
+  "Perfecto. Un impostor entre vosotros. Cuando estéis listos, que empiece el drama.",
+  "Todo listo. Decid mentiras, desconfiad, acusad… lo normal entre amigos.",
+  "Roles entregados. A partir de aquí: suerte, intuición… y puñaladas verbales.",
+  "Ya podéis empezar la partida. O seguir discutiendo, que también es divertido.",
+  "Listo. Uno de vosotros ya está disfrutando demasiado.",
+  "Cuando estéis listos para destruir amistades, empezad.",
+  "Nada raro. Solo un impostor intentando parecer normal.",
+  "OK. Misterio activado. Ahora haced como que sabéis lo que hacéis."
+]
+
+
 function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -146,6 +165,7 @@ const Messages = {
     choosePlayers: () => pickRandom(CHOOSE_PLAYERS_MESSAGES),
     namePlaceholder: () => pickRandom(NAME_PLACEHOLDER_MESSAGES),
     killedCitizen: () => pickRandom(KILLED_CITIZEN),
+    getWaitUntilReady: () => pickRandom(WAIT_PLAYERS),
     passPhone: (playerName) =>
       replace(pickRandom(PASS_PHONE), { player: playerName }),
   },

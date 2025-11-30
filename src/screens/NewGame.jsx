@@ -4,27 +4,28 @@ import SecundaryButton from '../elements/SecundaryButton';
 import InputText from '../elements/InputText';
 import PrimaryButton from '../elements/PrimaryButton';
 import Messages from '../Messages';
+import SmallText from '../elements/SmallText';
+import ListItem from '../elements/ListItem';
 
 function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
   const [newPlayer, setNewPlayer] = useState('');
-  const newPlayerInputRef = useRef(null);
+  //This is required so it does not change message on every re-rendering
+  const [choosePlayersMessage, _] = useState(Messages.random.choosePlayers())
 
   const handlePlayersChange = (e) => {
     addNewPlayer(newPlayer)
     setNewPlayer('')
-    newPlayerInputRef.current.focus()
   }
 
   const handlePlayerRemove = (player) => {
     removePlayer(player)
-    newPlayerInputRef.current.focus()
   }
 
   const playersList = players.map(player =>
-    <div className='flex items-center justify-between bg-gray-800 rounded-lg px-4 py-2 text-gray-100' key={player}>
-      {player}
+    <ListItem key={player}>
+      <span className="text-left">{player}</span>      
       <SecundaryButton onClick={() => handlePlayerRemove(player)}>❌</SecundaryButton>
-    </div>
+    </ListItem>
   );
 
   const handleKeyDown = (e) => {
@@ -35,16 +36,17 @@ function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
 
   return (
     <>
-      <Subtitle>{Messages.random.choosePlayers()}</Subtitle>
-      <div className='space-y-2 mb-6'>{playersList}</div>
+      <Subtitle>{choosePlayersMessage}</Subtitle>
       <div>
         <div className='flex gap-2 mb-6'>
-          <InputText ref={newPlayerInputRef} type="text" value={newPlayer} onChange={e => setNewPlayer(e.target.value)} placeholder={Messages.random.namePlaceholder()} autoFocus onKeyDown={handleKeyDown}/>
+          <InputText type="text" value={newPlayer} onChange={e => setNewPlayer(e.target.value)} placeholder={Messages.random.namePlaceholder()} onKeyDown={handleKeyDown}/>
           <SecundaryButton onClick={handlePlayersChange}>Añade</SecundaryButton>
         </div>
       </div>
+      <div className='flex flex-col space-y-2 mt-4 mb-6'>{playersList}</div>
       <div>
-      <PrimaryButton disabled={players.length < 3} onClick={() => startGame()}>Comenzar partida</PrimaryButton>
+        {players.length < 3 && (<SmallText>Se necesitan al menos 3 jugadores</SmallText>)}
+      <PrimaryButton disabled={players.length < 3 || newPlayer.length > 0} onClick={() => startGame()}>Comenzar partida</PrimaryButton>
       </div>
     </>
   )
