@@ -23,7 +23,7 @@ function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
   const playersList = players.map(player =>
     <div className='flex items-center justify-between bg-gray-800 rounded-lg px-4 py-2 text-gray-100' key={player}>
       {player}
-      <SecundaryButton onClick={() => handlePlayerRemove(player)}>X</SecundaryButton>
+      <SecundaryButton onClick={() => handlePlayerRemove(player)}>❌</SecundaryButton>
     </div>
   );
 

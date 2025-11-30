@@ -14,29 +14,29 @@ const KILLED_CITIZEN = [
 ];
 
 const IMPOSTOR_WIN = [
-  "El impostor ha ganado. Y vosotros ayudando, básicamente.",
-  "Victoria del impostor. Ni disimulando os salváis.",
-  "Ha ganado el impostor. GG EZ.",
+  "Y vosotros ayudando, básicamente.",
+  " Ni disimulando os salváis.",
+  "GG EZ.",
   "El impostor os ha toreado como ha querido.",
   "El impostor se ha reído de todos. Literalmente.",
-  "Ganó el impostor. Qué shock… nadie lo vio venir, ¿verdad?",
-  "El impostor ha ganado sin despeinarse.",
-  "El impostor os ha hecho un speedrun.",
+  "Qué shock… nadie lo vio venir, ¿verdad?",
+  "Ha ganado sin despeinarse.",
+  "Os ha hecho un speedrun.",
   "Habéis perdido. Pero el impostor os lo agradece.",
-  "El impostor os manda saludos y un ‘gracias por participar’."
+  "Os manda saludos y un ‘gracias por participar’."
 ];
 
 const CITIZEN_WIN = [
-  "Los ciudadanos ganan. ¡Milagro!",
-  "Victoria ciudadana. Algo habrá salido bien por accidente.",
+  "¡Milagro!",
+  "Algo habrá salido bien por accidente.",
   "Ciudadanos: 1 — Impositor: 0. Toma ya.",
   "Han ganado los inocentes. Era hora.",
-  "Ciudadanos victoriosos. No sé cómo, pero oye, bien.",
-  "Los ciudadanos ganan. El impostor está llorando en una esquina.",
-  "Ciudadanos en la cima. Qué raro se siente esto…",
+  "No sé cómo, pero oye, bien.",
+  "El impostor está llorando en una esquina.",
+  "Qué raro se siente esto…",
   "Vais mejorando. Un poco. Muy poco.",
   "Victoria limpia. Casi parece que supierais jugar.",
-  "Ciudadanos ganan. Esto sí que no me lo esperaba."
+  "Esto sí que no me lo esperaba."
 ];
 
 const INTRO = [
@@ -55,14 +55,14 @@ const INTRO = [
 const CITIZEN_ASSIGNMENT = [
   "Eres un simple ciudadano. Qué glamour.",
   "No eres el impostor… vaya, qué sorpresa.",
-  "Ciudadano. Haz lo que puedas, que tampoco es mucho.",
-  "Inocente total. Como tu historial de decisiones.",
+  "Eres ciudadano. Haz lo que puedas, que tampoco es mucho.",
+  "Inocente total. Como tu historial de decisiones. Eres ciudadano.",
   "Te ha tocado ser ciudadano. No te duermas, crack.",
   "Ciudadano otra vez. No llores, podría ser peor.",
   "Eres ciudadano. Así que piensa. O intenta aparentarlo.",
-  "No eres el impostor, pero tampoco eres especial.",
-  "Ciudadano. Observa, sospecha y… bueno, suerte.",
-  "Inocente como siempre. Úsalo a tu favor. O no."
+  "No eres el impostor, pero tampoco eres especial. Eres ciudadano.",
+  "Eres ciudadano. Observa, sospecha y… bueno, suerte.",
+  "Inocente como siempre. Úsalo a tu favor. O no. Eres ciudadano"
 ];
 
 const PASS_PHONE = [

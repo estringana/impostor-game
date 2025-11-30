@@ -133,7 +133,7 @@ function App() {
   const renderFailScreen = () => {
     const goBackToKilling = () => setState(State.KILLING);
     return (<>
-      <Text>{Messages.random.killedCitizen()}</Text>
+      <Text>😵 {Messages.random.killedCitizen()}</Text>
       <PrimaryButton onClick={goBackToKilling}>Matar a otro jugador</PrimaryButton>
     </>)
   }

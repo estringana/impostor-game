@@ -26,8 +26,8 @@ function RevealRoles({ players, footballPlayer, rolesRevealed }) {
     const message = Messages.random.passPhone(players[currentIndex].name);
     return (
       <div key='currentIndex' className='animate-fade-in-up'>
-        <Text>{message}</Text>
-        <PrimaryButton onClick={() => handleConfirmPlayer()}>Soy {players[currentIndex].name}</PrimaryButton>
+        <Text>📱 {message}</Text>
+        <PrimaryButton onClick={() => handleConfirmPlayer()}>👉 Soy {players[currentIndex].name}</PrimaryButton>
       </div>
     )
   }
@@ -35,7 +35,7 @@ function RevealRoles({ players, footballPlayer, rolesRevealed }) {
   const loading = () => {
     return (
       <div className="animate-fade-in-up">
-        <p className="mb-6 text-center">Preparando tu rol...</p>
+        <p className="mb-6 text-center">Cargando rol...</p>
       </div>
     )
   }
@@ -44,7 +44,7 @@ function RevealRoles({ players, footballPlayer, rolesRevealed }) {
     return (
       <>
         <Text>{Messages.for(PlayerRole.CITIZEN).assignment()}</Text>
-        <Text>El jugador es {footballPlayer}</Text>
+        <Text>⚽ El jugador es {footballPlayer}</Text>
         <PrimaryButton onClick={() => revealNext()}>Entendido</PrimaryButton>
       </>
     )
@@ -53,7 +53,7 @@ function RevealRoles({ players, footballPlayer, rolesRevealed }) {
   const showImpostor = () => {
     return (
       <>
-        <Text>{Messages.for(PlayerRole.IMPOSTOR).assignment()}</Text>
+        <Text>😈 {Messages.for(PlayerRole.IMPOSTOR).assignment()}</Text>
         <WarningButton onClick={() => revealNext()}>🤫 Soy el impostor</WarningButton>
       </>
     )
