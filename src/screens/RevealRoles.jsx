@@ -11,7 +11,7 @@ const State = {
   REVEALING: 3,
 }
 
-function RevealRoles({ players, footballPlayer, rolesRevealed }) {
+function RevealRoles({ players, secretWord, wordsetIcon, rolesRevealed }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentState, setCurrentState] = useState(State.PASS_PHONE)
 
@@ -44,7 +44,7 @@ function RevealRoles({ players, footballPlayer, rolesRevealed }) {
     return (
       <>
         <Text>{Messages.for(PlayerRole.CITIZEN).assignment()}</Text>
-        <Text>⚽ El jugador es {footballPlayer}</Text>
+        <Text>Tu palabra secreta es: {wordsetIcon} {secretWord}</Text>
         <PrimaryButton onClick={() => revealNext()}>Entendido</PrimaryButton>
       </>
     )

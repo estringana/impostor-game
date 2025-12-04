@@ -1,5 +1,4 @@
 function ListItem({
-  key,
   children,
   ...props
 }) {
@@ -9,7 +8,7 @@ function ListItem({
   rounded-xl px-4 py-3
   active:scale-[0.98]
   transition-all duration-150
-  hover:bg-gray-700' key={key} {...props}>
+  hover:bg-gray-700' {...props}>
         {children}
     </div>
   )

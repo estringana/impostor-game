@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import NewGame from './screens/NewGame'
+import SetPlayers from './screens/SetPlayers'
 import Lobby from './screens/Lobby'
 import RevealRoles from './screens/RevealRoles'
 import Killing from './screens/Killing'
@@ -13,10 +13,13 @@ import PrimaryButton from './elements/PrimaryButton'
 import GameEnded from './screens/GameEnded'
 import { PlayerRole, PlayerState, getNewPlayer } from './Player'
 import Messages from './Messages'
+import WordSets from './WordSets'
+import SetWordset from './screens/SetWordSet'
 
 const State = {
   LOBBY: 'LOBBY',
-  SETTING_GAME: 'SETTING_GAME',
+  PLAYERS: 'PLAYERS',
+  WORDSET: 'WORDSET',
   REVEAL_ROLES: 'REVEAL_ROLES',
   READY_TO_START: 'READY_TO_START',
   KILLING: 'KILLING',
@@ -24,44 +27,12 @@ const State = {
   GAME_ENDED: 'GAME_ENDED',
 };
 
-const footballPlayers = [
-  'Lionel Messi',
-  'Cristiano Ronaldo',
-  'Neymar Jr',
-  'Kylian Mbappé',
-  'Erling Haaland',
-  'Robert Lewandowski',
-  'Luka Modrić',
-  'Andrés Iniesta',
-  'Xavi Hernández',
-  'Sergio Ramos',
-  'Gerard Piqué',
-  'Karim Benzema',
-  'Mohamed Salah',
-  'Kevin De Bruyne',
-  'Eden Hazard',
-  'David Beckham',
-  'Ronaldinho',
-  'Zinedine Zidane',
-  'Thierry Henry',
-  'Zlatan Ibrahimović',
-  'Wayne Rooney',
-  'Luis Suárez',
-  'Antoine Griezmann',
-  'Virgil van Dijk',
-  'Frank Lampard',
-  'Steven Gerrard',
-  'Andrea Pirlo',
-  'Francesco Totti',
-  'Didier Drogba',
-  'Arjen Robben'
-]
-
 function App() {
 
   const [state, setState] = useState(State.LOBBY);  
   const [impostorWins, setImpostorWins] = useState(false);  
-  const [footballPlayer, setFootballPlayer] = useState('');
+  const [secretWord, setSecretWord] = useState('');
+  const [wordsetIcon, setWordsetIcon] = useState('');
   const [players, setPlayers] = useState([
     getNewPlayer("Alex"),
     getNewPlayer("Juan"),
@@ -84,24 +55,27 @@ function App() {
     setPlayers(prev => prev.filter(p => p.name !== playerToRemove));
   };
 
-  const handleCreateGame = () => { 
-    setState(State.SETTING_GAME)
+  const handleCreateGame = () => {
+    setState(State.PLAYERS)
     setImpostorWins(false)
   }
-  
-  const handleStartGame = () => {
+
+  const playersIntroduced = () => {
     const impostorIndex = Math.floor(Math.random() * players.length);
-    const randomFootballer = footballPlayers[Math.floor(Math.random() * footballPlayers.length)];
-  
     setPlayers(prev => {
       const copy = [...prev];
       copy[impostorIndex] = { ...copy[impostorIndex], role: PlayerRole.IMPOSTOR };
       return copy;
     });
-  
-    setFootballPlayer(randomFootballer);
-    setState(State.REVEAL_ROLES);
+    setState(State.WORDSET);
   };
+
+  const handleWordSetSelected = (wordSetId) => {
+    const set = WordSets.getSet(wordSetId)
+    setSecretWord(WordSets.getWordFromSet(set));
+    setWordsetIcon(set.icon);
+    setState(State.REVEAL_ROLES);
+  }
 
   const handleRolesRevealed = () => {
     setState(State.READY_TO_START)
@@ -152,7 +126,7 @@ function App() {
   const startAgain = () => {
     setPlayers(prev => prev.map(p => getNewPlayer(p.name)));
     setImpostorWins(false);
-    setState(State.SETTING_GAME);
+    setState(State.PLAYERS);
   }
 
   return (
@@ -160,8 +134,9 @@ function App() {
       <Card key={state}>
         <Title>El impostor</Title>
         {state === State.LOBBY && <Lobby createGame={handleCreateGame} />}
-        {state === State.SETTING_GAME && <NewGame players={players.map(p => p.name)} addNewPlayer={handleNewPlayer} removePlayer={handleRemovePlayer} startGame={handleStartGame} />}
-        {state === State.REVEAL_ROLES && <RevealRoles players={players} footballPlayer={footballPlayer} rolesRevealed={handleRolesRevealed} />}
+        {state === State.PLAYERS && <SetPlayers players={players.map(p => p.name)} addNewPlayer={handleNewPlayer} removePlayer={handleRemovePlayer} playersIntroduced={playersIntroduced} />}
+        {state === State.WORDSET && <SetWordset wordsets={WordSets.getAll()} wordSetSelected={handleWordSetSelected} />}
+        {state === State.REVEAL_ROLES && <RevealRoles players={players} wordsetIcon={wordsetIcon} secretWord={secretWord} rolesRevealed={handleRolesRevealed} />}
         {state === State.READY_TO_START && renderReadyToStart()}
         {state === State.KILLING && <Killing players={players.filter(p => p.state == PlayerState.ALIVE)} killPlayer={handleKillingPlayer} />}
         {state === State.FAIL && renderFailScreen()}

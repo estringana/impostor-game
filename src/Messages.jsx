@@ -147,6 +147,24 @@ export const WAIT_PLAYERS = [
   "OK. Misterio activado. Ahora haced como que sabéis lo que hacéis."
 ]
 
+export const WORDSETS = [
+  "✨ Elegid un tema para romper amistades con estilo.",
+  "✨ ¿Qué universo queréis explorar hoy?",
+  "✨ Seleccionad categoría… el drama empieza en breve.",
+  "✨ Elegid el tema. La tensión está servida.",
+  "✨ Tema del día: decididlo juntos. O no, ya veremos.",
+  "😂 Seleccionad tema, que tengo prisa por veros discutir.",
+  "😂 Elegid categoría. El impostor necesita excusas nuevas.",
+  "😂 ¿Qué os apetece adivinar hoy? ¿Animales? ¿Comida? ¿Vuestras vidas?",
+  "😂 Elegid un tema. Si falláis, culpad al impostor.",
+  "😂 Vamos, elegid lo que sea. De verdad… lo que sea.",
+  "😈 Elegid un tema… y que empiece la manipulación.",
+  "😈 Escoged el terreno donde el impostor morirá. O no.",
+  "😈 Elegid la categoría. El impostor ya está sudando.",
+  "😈 Seleccionad vuestro destino. Literalmente.",
+  "😈 ¿Qué mentira colectiva os apetece hoy?"
+]
+
 
 function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -166,6 +184,7 @@ const Messages = {
     namePlaceholder: () => pickRandom(NAME_PLACEHOLDER_MESSAGES),
     killedCitizen: () => pickRandom(KILLED_CITIZEN),
     getWaitUntilReady: () => pickRandom(WAIT_PLAYERS),
+    chooseWordset: () => pickRandom(WORDSETS),
     passPhone: (playerName) =>
       replace(pickRandom(PASS_PHONE), { player: playerName }),
   },

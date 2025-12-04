@@ -7,7 +7,7 @@ import Messages from '../Messages';
 import SmallText from '../elements/SmallText';
 import ListItem from '../elements/ListItem';
 
-function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
+function SetPlayers({ players, addNewPlayer, removePlayer, playersIntroduced}) {
   const [newPlayer, setNewPlayer] = useState('');
   //This is required so it does not change message on every re-rendering
   const [choosePlayersMessage, _] = useState(Messages.random.choosePlayers())
@@ -46,10 +46,10 @@ function NewGame({ players, addNewPlayer, removePlayer, startGame}) {
       <div className='flex flex-col space-y-2 mt-4 mb-6'>{playersList}</div>
       <div>
         {players.length < 3 && (<SmallText>Se necesitan al menos 3 jugadores</SmallText>)}
-      <PrimaryButton disabled={players.length < 3 || newPlayer.length > 0} onClick={() => startGame()}>Comenzar partida</PrimaryButton>
+      <PrimaryButton disabled={players.length < 3 || newPlayer.length > 0} onClick={() => playersIntroduced()}>Elegir tematica</PrimaryButton>
       </div>
     </>
   )
 }
 
-export default NewGame
+export default SetPlayers
