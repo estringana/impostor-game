@@ -3,13 +3,15 @@ import Text from '../elements/Text';
 import {PlayerRole} from '../Player'
 import Messages from '../Messages';
 
-function GameEnded({ impostorWins, newGame }) {
-  const renderImpostorWins = () => (
+function GameEnded({ impostorWins, numberOfImpostors, newGame }) {
+  const renderImpostorWins = () => {
+    const message = numberOfImpostors === 1 ? 'El impostor ha ganado': 'Los impostores han ganado'
+    return (
     <>
-    <Text className="text-red-400 text-xl font-semibold mb-6">El impostor ha ganado 😈</Text>
-    <Text className="text-red-400 text-xl font-semibold mb-6">{Messages.for(PlayerRole.IMPOSTOR).win()}</Text>
-    </>
-  )
+    <Text className="text-red-400 text-xl font-semibold mb-6">{message} 😈</Text>
+    <Text className="text-red-400 text-xl font-semibold mb-6">{Messages.for(PlayerRole.IMPOSTOR).win(numberOfImpostors)}</Text>
+    </>)
+  }
 
   const renderCitizensWins = () => (
     <>

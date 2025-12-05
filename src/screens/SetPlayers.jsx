@@ -11,6 +11,7 @@ function SetPlayers({ players, addNewPlayer, removePlayer, playersIntroduced}) {
   const [newPlayer, setNewPlayer] = useState('');
   //This is required so it does not change message on every re-rendering
   const [choosePlayersMessage, _] = useState(Messages.random.choosePlayers())
+  const [numberOfImpostors, setNumberOfImpostors] = useState(1)
 
   const handlePlayersChange = (e) => {
     addNewPlayer(newPlayer)
@@ -46,7 +47,7 @@ function SetPlayers({ players, addNewPlayer, removePlayer, playersIntroduced}) {
       <div className='flex flex-col space-y-2 mt-4 mb-6'>{playersList}</div>
       <div>
         {players.length < 3 && (<SmallText>Se necesitan al menos 3 jugadores</SmallText>)}
-      <PrimaryButton disabled={players.length < 3 || newPlayer.length > 0} onClick={() => playersIntroduced()}>Elegir tematica</PrimaryButton>
+      <PrimaryButton disabled={players.length < 3 || newPlayer.length > 0} onClick={() => playersIntroduced()}>Elegir numero de impostores</PrimaryButton>
       </div>
     </>
   )

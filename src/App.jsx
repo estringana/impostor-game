@@ -15,24 +15,28 @@ import { PlayerRole, PlayerState, getNewPlayer } from './Player'
 import Messages from './Messages'
 import WordSets from './WordSets'
 import SetWordset from './screens/SetWordSet'
+import ImpostorsNumber from './screens/ImpostorsNumber'
 
 const State = {
   LOBBY: 'LOBBY',
   PLAYERS: 'PLAYERS',
+  IMPOSTOR_NUMBER: 'IMPOSTOR_NUMBER',
   WORDSET: 'WORDSET',
   REVEAL_ROLES: 'REVEAL_ROLES',
   READY_TO_START: 'READY_TO_START',
-  KILLING: 'KILLING',
+  KILLED_IMPOSTOR: 'KILLED_IMPOSTOR',
+  KILLED_CITIZEN: 'KILLED_CITIZEN',
   FAIL: 'FAIL',
   GAME_ENDED: 'GAME_ENDED',
 };
 
 function App() {
 
-  const [state, setState] = useState(State.LOBBY);  
-  const [impostorWins, setImpostorWins] = useState(false);  
+  const [state, setState] = useState(State.LOBBY);
+  const [impostorWins, setImpostorWins] = useState(false);
   const [secretWord, setSecretWord] = useState('');
   const [wordsetIcon, setWordsetIcon] = useState('');
+  const [numberOfImpostors, setNumberOfImpostors] = useState(1);
   const [players, setPlayers] = useState([
     getNewPlayer("Alex"),
     getNewPlayer("Juan"),
@@ -60,15 +64,32 @@ function App() {
     setImpostorWins(false)
   }
 
+  function pickRandomIndexes(count, arrayLength) {
+    const indexes = new Set();
+
+    while (indexes.size < count) {
+      const random = Math.floor(Math.random() * arrayLength);
+      indexes.add(random);
+    }
+
+    return [...indexes];
+  }
+
   const playersIntroduced = () => {
-    const impostorIndex = Math.floor(Math.random() * players.length);
+    setState(State.IMPOSTOR_NUMBER);
+  };
+
+  const impostorsSelected = () => {
+    const impostorIndexes = pickRandomIndexes(numberOfImpostors, players.length);
     setPlayers(prev => {
       const copy = [...prev];
-      copy[impostorIndex] = { ...copy[impostorIndex], role: PlayerRole.IMPOSTOR };
+      impostorIndexes.forEach((i) => {
+        copy[i] = { ...copy[i], role: PlayerRole.IMPOSTOR };
+      })
       return copy;
     });
     setState(State.WORDSET);
-  };
+  }
 
   const handleWordSetSelected = (wordSetId) => {
     const set = WordSets.getSet(wordSetId)
@@ -83,33 +104,55 @@ function App() {
 
   const handleKillingPlayer = (killedPlayerName) => {
     setPlayers(prev => {
-      const updated = prev.map(player =>
-        player.name === killedPlayerName
-          ? { ...player, state: PlayerState.DEATH }
-          : player
+      let killedRole = PlayerRole.CITIZEN;
+      const updated = prev.map(player => {
+        if (player.name === killedPlayerName) {
+          killedRole = player.role
+          return { ...player, state: PlayerState.DEATH }
+        }
+        return player
+      }
       );
 
-      const killedPlayer = updated.find(p => p.name === killedPlayerName);
-      const aliveCount = updated.filter(p => p.state === PlayerState.ALIVE).length;
+      const { aliveCitizens, aliveImpostors } = updated.reduce(
+        (acc, p) => {
+          if (p.state === PlayerState.ALIVE) {
+            if (p.role === PlayerRole.CITIZEN) acc.aliveCitizens++;
+            else if (p.role === PlayerRole.IMPOSTOR) acc.aliveImpostors++;
+          }
+          return acc;
+        },
+        { aliveCitizens: 0, aliveImpostors: 0 }
+      );
 
-      if (killedPlayer.role === PlayerRole.IMPOSTOR) {
+      if (aliveImpostors === 0) {
         setImpostorWins(false);
         setState(State.GAME_ENDED);
-      } else if (aliveCount <= 2) {
+      } else if (aliveImpostors >= aliveCitizens) {
         setImpostorWins(true);
         setState(State.GAME_ENDED);
+      } else if (killedRole === PlayerRole.CITIZEN) {
+        setState(State.KILLED_CITIZEN);
       } else {
-        setState(State.FAIL);
+        setState(State.KILLED_IMPOSTOR);
       }
 
       return updated;
     });
   };
 
-  const renderFailScreen = () => {
+  const renderCitizenKilledScreen = () => {
     const goBackToKilling = () => setState(State.KILLING);
     return (<>
-      <Text>😵 {Messages.random.killedCitizen()}</Text>
+      <Text>{Messages.random.killedCitizen()}</Text>
+      <PrimaryButton onClick={goBackToKilling}>Matar a otro jugador</PrimaryButton>
+    </>)
+  }
+
+  const renderImpostorKilledScreen = () => {
+    const goBackToKilling = () => setState(State.KILLING);
+    return (<>
+      <Text>{Messages.random.killedImpostor()}</Text>
       <PrimaryButton onClick={goBackToKilling}>Matar a otro jugador</PrimaryButton>
     </>)
   }
@@ -135,12 +178,14 @@ function App() {
         <Title>El impostor</Title>
         {state === State.LOBBY && <Lobby createGame={handleCreateGame} />}
         {state === State.PLAYERS && <SetPlayers players={players.map(p => p.name)} addNewPlayer={handleNewPlayer} removePlayer={handleRemovePlayer} playersIntroduced={playersIntroduced} />}
+        {state === State.IMPOSTOR_NUMBER && <ImpostorsNumber numberOfImpostors={numberOfImpostors} setNumberOfImpostors={setNumberOfImpostors} impostorsSelected={impostorsSelected} />}
         {state === State.WORDSET && <SetWordset wordsets={WordSets.getAll()} wordSetSelected={handleWordSetSelected} />}
-        {state === State.REVEAL_ROLES && <RevealRoles players={players} wordsetIcon={wordsetIcon} secretWord={secretWord} rolesRevealed={handleRolesRevealed} />}
+        {state === State.REVEAL_ROLES && <RevealRoles players={players} wordsetIcon={wordsetIcon} secretWord={secretWord} numberOfImpostors={numberOfImpostors} rolesRevealed={handleRolesRevealed} />}
         {state === State.READY_TO_START && renderReadyToStart()}
         {state === State.KILLING && <Killing players={players.filter(p => p.state == PlayerState.ALIVE)} killPlayer={handleKillingPlayer} />}
-        {state === State.FAIL && renderFailScreen()}
-        {state === State.GAME_ENDED && <GameEnded impostorWins={impostorWins} newGame={startAgain}/>}
+        {state === State.KILLED_CITIZEN && renderCitizenKilledScreen()}
+        {state === State.KILLED_IMPOSTOR && renderImpostorKilledScreen()}
+        {state === State.GAME_ENDED && <GameEnded impostorWins={impostorWins} numberOfImpostors={numberOfImpostors} newGame={startAgain} />}
       </Card>
     </Main>
   )

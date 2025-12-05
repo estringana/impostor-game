@@ -11,7 +11,7 @@ const State = {
   REVEALING: 3,
 }
 
-function RevealRoles({ players, secretWord, wordsetIcon, rolesRevealed }) {
+function RevealRoles({ players, secretWord, wordsetIcon, numberOfImpostors, rolesRevealed }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentState, setCurrentState] = useState(State.PASS_PHONE)
 
@@ -51,10 +51,11 @@ function RevealRoles({ players, secretWord, wordsetIcon, rolesRevealed }) {
   }
 
   const showImpostor = () => {
+    const other = players.find((p, i) => p.role === PlayerRole.IMPOSTOR && i !== currentIndex)
     return (
       <>
-        <Text>😈 {Messages.for(PlayerRole.IMPOSTOR).assignment()}</Text>
-        <WarningButton onClick={() => revealNext()}>🤫 Soy el impostor</WarningButton>
+        <Text>😈 {Messages.for(PlayerRole.IMPOSTOR).assignment(other ?  other.name : null)}</Text>
+        <WarningButton onClick={() => revealNext()}>🤫 Soy impostor</WarningButton>
       </>
     )
   }
