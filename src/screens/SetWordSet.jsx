@@ -31,7 +31,9 @@ function SetWordset({ wordsets, wordSetSelected }) {
         })}
       </div>
       <div className='mt-6'>
-        <PrimaryButton disabled={selectedId.length === 0} onClick={() => wordSetSelected(selectedId)}>A jugar</PrimaryButton>
+        <PrimaryButton disabled={selectedId.length === 0} onClick={() => wordSetSelected(selectedId)}>
+          {selectedId === 'custom' ? 'Introduce tus palabras' : 'A jugar'}
+        </PrimaryButton>
       </div>
     </>
   )

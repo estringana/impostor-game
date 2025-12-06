@@ -44,7 +44,8 @@ function RevealRoles({ players, secretWord, wordsetIcon, numberOfImpostors, role
     return (
       <>
         <Text>{Messages.for(PlayerRole.CITIZEN).assignment()}</Text>
-        <Text>Tu palabra secreta es: {wordsetIcon} {secretWord}</Text>
+        <Text>Tu palabra secreta es:</Text>
+        <Text className="text-2xl mb-6"> {wordsetIcon} {secretWord}</Text>
         <PrimaryButton onClick={() => revealNext()}>Entendido</PrimaryButton>
       </>
     )
