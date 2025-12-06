@@ -308,6 +308,12 @@ const WORD_SETS = [
       "Jarrón"
     ]
   },
+  {
+    id: "custom",
+    icon: "📝",
+    label: "Palabras personalizadas",
+    description: "Escribid vuestras propias palabras. Chistes internos bienvenidos."
+  }
 ]
 
 function pickRandom(arr) {
@@ -316,7 +322,8 @@ function pickRandom(arr) {
 
 const WordSets = {
   getAll: () => WORD_SETS,
-  getWordFromSet: (set) => pickRandom(set.words),
+  getWordFromSet: (set) => WordSets.getRandomWordFromWords(set.words),
+  getRandomWordFromWords: (words) => pickRandom(words),
   getSet: (setId) => WORD_SETS.find((s) => s.id === setId),
 }
 

@@ -16,12 +16,14 @@ import Messages from './Messages'
 import WordSets from './WordSets'
 import SetWordset from './screens/SetWordSet'
 import ImpostorsNumber from './screens/ImpostorsNumber'
+import CustomWordSet from './screens/CustomWordSet'
 
 const State = {
   LOBBY: 'LOBBY',
   PLAYERS: 'PLAYERS',
   IMPOSTOR_NUMBER: 'IMPOSTOR_NUMBER',
   WORDSET: 'WORDSET',
+  SET_CUSTOM_WORDS: 'SET_CUSTOM_WORDS',
   REVEAL_ROLES: 'REVEAL_ROLES',
   READY_TO_START: 'READY_TO_START',
   KILLED_IMPOSTOR: 'KILLED_IMPOSTOR',
@@ -36,12 +38,13 @@ function App() {
   const [impostorWins, setImpostorWins] = useState(false);
   const [secretWord, setSecretWord] = useState('');
   const [wordsetIcon, setWordsetIcon] = useState('');
+  const [customWordSet, setCustomWordSet] = useState([]);
   const [numberOfImpostors, setNumberOfImpostors] = useState(1);
   const [players, setPlayers] = useState([
-    getNewPlayer("Alex"),
-    getNewPlayer("Juan"),
-    getNewPlayer("Alonso"),
-    getNewPlayer("Juanjo"),
+    // getNewPlayer("Alex"),
+    // getNewPlayer("Juan"),
+    // getNewPlayer("Alonso"),
+    // getNewPlayer("Juanjo"),
   ]);
 
   const handleNewPlayer = (newPlayerName) => {
@@ -93,6 +96,11 @@ function App() {
 
   const handleWordSetSelected = (wordSetId) => {
     const set = WordSets.getSet(wordSetId)
+    if (wordSetId === "custom") {
+      setWordsetIcon(set.icon);
+      setState(State.SET_CUSTOM_WORDS);
+      return;
+    }
     setSecretWord(WordSets.getWordFromSet(set));
     setWordsetIcon(set.icon);
     setState(State.REVEAL_ROLES);
@@ -100,6 +108,13 @@ function App() {
 
   const handleRolesRevealed = () => {
     setState(State.READY_TO_START)
+  }
+
+
+  const handleCustomWordSetFinish = (words) => {
+    setCustomWordSet(words)
+    setSecretWord(WordSets.getRandomWordFromWords(words));
+    setState(State.REVEAL_ROLES);
   }
 
   const handleKillingPlayer = (killedPlayerName) => {
@@ -180,6 +195,7 @@ function App() {
         {state === State.PLAYERS && <SetPlayers players={players.map(p => p.name)} addNewPlayer={handleNewPlayer} removePlayer={handleRemovePlayer} playersIntroduced={playersIntroduced} />}
         {state === State.IMPOSTOR_NUMBER && <ImpostorsNumber numberOfImpostors={numberOfImpostors} setNumberOfImpostors={setNumberOfImpostors} impostorsSelected={impostorsSelected} />}
         {state === State.WORDSET && <SetWordset wordsets={WordSets.getAll()} wordSetSelected={handleWordSetSelected} />}
+        {state === State.SET_CUSTOM_WORDS && <CustomWordSet words={customWordSet} customWordSetFinish={handleCustomWordSetFinish} />}
         {state === State.REVEAL_ROLES && <RevealRoles players={players} wordsetIcon={wordsetIcon} secretWord={secretWord} numberOfImpostors={numberOfImpostors} rolesRevealed={handleRolesRevealed} />}
         {state === State.READY_TO_START && renderReadyToStart()}
         {state === State.KILLING && <Killing players={players.filter(p => p.state == PlayerState.ALIVE)} killPlayer={handleKillingPlayer} />}
